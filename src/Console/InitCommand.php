@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Butschster\ContextGenerator\Template\Console;
 
-use Butschster\ContextGenerator\Application\JsonSchema;
 use Butschster\ContextGenerator\Config\ConfigType;
 use Butschster\ContextGenerator\Config\Registry\ConfigRegistry;
 use Butschster\ContextGenerator\Console\BaseCommand;
@@ -24,6 +23,8 @@ use Symfony\Component\Yaml\Yaml;
 )]
 final class InitCommand extends BaseCommand
 {
+    private const string SCHEMA_URL = 'https://raw.githubusercontent.com/context-hub/generator/refs/heads/main/json-schema.json';
+
     #[Argument(
         name: 'template',
         description: 'Specific template to use (optional)',
@@ -300,7 +301,7 @@ final class InitCommand extends BaseCommand
     ): int {
         try {
             // Create a new config registry with schema for output
-            $outputConfig = new ConfigRegistry(JsonSchema::SCHEMA_URL);
+            $outputConfig = new ConfigRegistry(self::SCHEMA_URL);
 
             // Copy all registries from the original config
             foreach ($config->all() as $registry) {

@@ -14,7 +14,8 @@
     "php": ">=8.3",
     "spiral/boot": "^3.15",
     "spiral/console": "^3.15",
-    "spiral/files": "^3.15"
+    "spiral/files": "^3.15",
+    "symfony/yaml": "^6.0 | ^7.0 | ^8.0"
   },
   "require-dev": {
     "spiral/code-style": "^2.2",
