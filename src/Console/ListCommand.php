@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command;
 #[AsCommand(
     name: 'template:list',
     description: 'List available project templates',
+    aliases: ['templates'],
 )]
 final class ListCommand extends BaseCommand
 {
