@@ -19,6 +19,7 @@ use Butschster\ContextGenerator\Template\Console\ListCommand;
 use Butschster\ContextGenerator\Template\Definition\DjangoTemplateDefinition;
 use Butschster\ContextGenerator\Template\Definition\ExpressTemplateDefinition;
 use Butschster\ContextGenerator\Template\Definition\FastApiTemplateDefinition;
+use Butschster\ContextGenerator\Template\Definition\GenericTemplateDefinition;
 use Butschster\ContextGenerator\Template\Definition\FlaskTemplateDefinition;
 use Butschster\ContextGenerator\Template\Definition\GenericPhpTemplateDefinition;
 use Butschster\ContextGenerator\Template\Definition\GinTemplateDefinition;
@@ -36,6 +37,7 @@ use Butschster\ContextGenerator\Template\Definition\Yii2TemplateDefinition;
 use Butschster\ContextGenerator\Template\Definition\Yii3TemplateDefinition;
 use Butschster\ContextGenerator\Template\Detection\Strategy\AnalyzerBasedDetectionStrategy;
 use Butschster\ContextGenerator\Template\Detection\Strategy\CompositeDetectionStrategy;
+use Butschster\ContextGenerator\Template\Detection\Strategy\FallbackDetectionStrategy;
 use Butschster\ContextGenerator\Template\Detection\Strategy\TemplateBasedDetectionStrategy;
 use Butschster\ContextGenerator\Template\Provider\BuiltinTemplateProvider;
 use Butschster\ContextGenerator\Template\Registry\TemplateRegistry;
@@ -80,6 +82,9 @@ final class TemplateSystemBootloader extends Bootloader
                 new ReactTemplateDefinition(),
                 new VueTemplateDefinition(),
                 new ExpressTemplateDefinition(),
+
+                // Generic fallback (lowest priority)
+                new GenericTemplateDefinition(),
             ]),
 
             // Enhanced analysis system with Python and Go analyzers
@@ -103,9 +108,11 @@ final class TemplateSystemBootloader extends Bootloader
             CompositeDetectionStrategy::class => static fn(
                 TemplateBasedDetectionStrategy $templateStrategy,
                 AnalyzerBasedDetectionStrategy $analyzerStrategy,
+                FallbackDetectionStrategy $fallbackStrategy,
             ): CompositeDetectionStrategy => new CompositeDetectionStrategy([
-                $templateStrategy,
-                $analyzerStrategy,
+                $templateStrategy,    // priority 100
+                $analyzerStrategy,    // priority 50
+                $fallbackStrategy,    // priority 1
             ]),
         ];
     }
